@@ -11,5 +11,13 @@ class ForecastsFilter(filters.FilterSet):
     title = CharFilterInFilter(field_name='title', lookup_expr='in')
 
     class Meta:
-        model = models.Ticker
+        model = models.Forecast
         fields = ['symbol', 'title']
+
+
+class ChatMessagesFilter(filters.FilterSet):
+    symbol = CharFilterInFilter(field_name='symbol')
+
+    class Meta:
+        model = models.Forecast
+        fields = ['symbol']

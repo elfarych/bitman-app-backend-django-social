@@ -12,9 +12,8 @@ class Trader(models.Model):
     email = models.EmailField(null=True, blank=True)
     avatar = ThumbnailerImageField(upload_to='users/', resize_source={'size': (500, 500), 'crop': 'scale'})
     chat_banned = models.BooleanField(default=False)
-    invite_id = models.PositiveIntegerField(null=True, blank=True) 
     for_referals_paid_sum = models.PositiveIntegerField(default=0)
-    referals = models.ManyToManyField('self', related_name='referals', symmetrical=False)
+    referals = models.ManyToManyField('self', related_name='my_referals', related_query_name='my_referals', blank=True)
     date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     update = models.DateTimeField(auto_now=True)
 
@@ -37,7 +36,7 @@ class WatchList(models.Model):
         return f'{self.user.username} - {self.title}'
 
     class Meta:
-        ordering = ('order', '-date')
+        ordering = ('-date',)
 
 
 class ChatMessage(models.Model):

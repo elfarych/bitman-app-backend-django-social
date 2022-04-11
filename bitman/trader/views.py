@@ -22,6 +22,9 @@ class TraderCreateView(generics.CreateAPIView):
     queryset = models.Trader.objects.all()
     serializer_class = serializers.TraderSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 class TraderUpdateView(generics.UpdateAPIView):
     """Update trader profile"""
@@ -45,16 +48,17 @@ class TraderDeleteView(generics.DestroyAPIView):
 class ChatMessagesView(generics.ListAPIView):
     """Get chat messages by symbol (query)"""
     serializer_class = serializers.ChatMessageSerializer
-
-    def get_queryset(self):
-        messages = models.ChatMessage.objects.filter(symbol=self.kwargs['symbol']))    
-        return messages
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = service.ChatMessagesFilter
 
 
 class CreateChatMessage(generics.CreateAPIView):
     """Create chat message"""
     queryset = models.ChatMessage.objects.all()
-    serializer_class = serializers.ChatMessageSerializer
+    serializer_class = serializers.ChatMessageSerializer 
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class ForecastsListView(generics.ListAPIView):
@@ -92,6 +96,10 @@ class CreateForecastView(generics.CreateAPIView):
 
 
 class ForecastDeleteView(generics.DestroyAPIView):
-    """Delete Forecast"""
-    queryset = models.Forecast.objects.all()
+    """Delete forecast"""
     serializer_class = serializers.ForecastDetailSerializer
+
+    def get_queryset(self):
+        trader = models.Trader.objects.find_by_user(self.request.user)   
+        forecasts = models.Forecast.objects.filter(trader=trader) 
+        return forecasts

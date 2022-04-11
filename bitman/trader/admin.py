@@ -25,9 +25,8 @@ class CaseInline(admin.TabularInline):
 @admin.register(models.Trader)
 class TraderAdmin(admin.ModelAdmin):
     list_display = ('name', 'user', 'email', 'chat_banned', 'date', 'update')
-    list_filter = ('chat_banned',)
     search_fields = ('user__username', 'name', 'email')
-    list_filter = ('chat_banned', 'data', 'update')
+    list_filter = ('chat_banned', 'date', 'update')
     inlines = [WathListInline, SettingInline, ChatMessageInline, CaseInline]
 
 
