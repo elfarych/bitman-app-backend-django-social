@@ -14,7 +14,7 @@ class WatchListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CaseItems(serializers.ModelSerializer):
+class CaseItemsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CaseItem
@@ -22,7 +22,7 @@ class CaseItems(serializers.ModelSerializer):
 
 
 class CaseSerializer(serializers.ModelSerializer):
-    items = CaseItems(many=True, read_only=True)
+    items = CaseItemsSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Case

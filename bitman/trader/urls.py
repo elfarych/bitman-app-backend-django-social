@@ -4,12 +4,15 @@ from . import views
 urlpatterns = [
     path('trader/me/', views.TraderView.as_view()),
     path('trader/create/', views.TraderCreateView.as_view()),
-    path('trader/update/', views.TraderUpdateView.as_view()),
+    path('trader/update/<int:pk>/', views.TraderUpdateView.as_view()),
     path('trader/delete/', views.TraderDeleteView.as_view()),
 
 
     path('chat/messages/', views.ChatMessagesView.as_view()),
     path('chat/message/create/', views.CreateChatMessage.as_view()),
+
+    path('case/create/', views.CreateCaseView.as_view()),
+    path('case/update/<int:pk>/', views.UpdateCaseView.as_view()),
 
     path('forecasts/', views.ForecastsListView.as_view()),
     path('forecasts/<int:pk>/', views.ForecastDetailView.as_view()),

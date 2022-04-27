@@ -8,12 +8,12 @@ from . import models
 from . import service
 
 
-class TraderView(generics.RetrieveAPIView):
+class TraderView(generics.ListAPIView):
     """Get trader by user"""
     serializer_class = serializers.TraderSerializer
 
     def get_queryset(self):
-        trader = models.Trader.objects.find_by_user(self.request.user)    
+        trader = models.Trader.objects.filter(user=self.request.user)
         return trader
 
 
@@ -32,7 +32,7 @@ class TraderUpdateView(generics.UpdateAPIView):
     serializer_class = serializers.TraderSerializer
 
     def get_queryset(self):
-        trader = models.Trader.objects.find_by_user(self.request.user)    
+        trader = models.Trader.objects.filter(user=self.request.user)
         return trader
 
 
@@ -103,3 +103,22 @@ class ForecastDeleteView(generics.DestroyAPIView):
         trader = models.Trader.objects.find_by_user(self.request.user)   
         forecasts = models.Forecast.objects.filter(trader=trader) 
         return forecasts
+
+
+class CreateCaseView(generics.CreateAPIView):
+    """Create new trader case view"""
+    serializer_class = serializers.CaseSerializer
+    queryset = models.Case.objects.all()
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        trader = models.Trader.objects.filter(user=user)[0]
+        serializer.save(trader=trader, user=user)
+
+
+class UpdateCaseView(generics.UpdateAPIView):
+    """Update trader case by id"""
+    serializer_class = serializers.CaseSerializer
+
+    def get_queryset(self):
+        cases = models.Case.objects.filter(user=self.request.user)

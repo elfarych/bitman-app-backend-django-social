@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
 
-    'trader'
+    'trader',
+    'onlineTrader',
 ]
 
 MIDDLEWARE = [

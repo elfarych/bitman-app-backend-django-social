@@ -10,6 +10,7 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
+    path('partners/', include('onlineTrader.urls')),
     path('', include('trader.urls')),
     # url(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     # url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),

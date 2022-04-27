@@ -1,4 +1,3 @@
-from operator import mod
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.auth.models import User
@@ -7,10 +6,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 class Trader(models.Model):
     # Пользователь
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", null=True, blank=True)
     name = models.CharField(null=True, blank=True, max_length=255)
     email = models.EmailField(null=True, blank=True)
-    avatar = ThumbnailerImageField(upload_to='users/', resize_source={'size': (500, 500), 'crop': 'scale'})
+    avatar = ThumbnailerImageField(upload_to='users/', resize_source={'size': (300, 300), 'crop': 'scale'}, null=True, blank=True, max_length=1000)
     chat_banned = models.BooleanField(default=False)
     for_referals_paid_sum = models.PositiveIntegerField(default=0)
     referals = models.ManyToManyField('self', related_name='my_referals', related_query_name='my_referals', blank=True)
@@ -67,6 +66,7 @@ class Setting(models.Model):
 class Case(models.Model):
     # Портфель
     trader = models.ForeignKey(Trader, on_delete=models.SET_NULL, null=True, blank=True, related_name='cases')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=255)
     text = models.CharField(max_length=255, null=True, blank=True)
     public = models.BooleanField(default=False)
@@ -74,7 +74,7 @@ class Case(models.Model):
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'${self.trader} - ${self.symbol}'
+        return f'{self.trader} - {self.title}'
 
     class Meta:
         ordering = ('-date',)   
@@ -82,17 +82,16 @@ class Case(models.Model):
 
 class CaseItem(models.Model):
     # Монета в портфеле
-    case = models.ForeignKey(Case, on_delete=models.CASCADE, related_name='items')
+    case = models.ForeignKey(Case, on_delete=models.SET_NULL, null=True, related_name='items')
     symbol = models.CharField(max_length=20)
     price = models.FloatField()
-    quantity_usd = models.FloatField()
     quantity_base_asset = models.FloatField()
-    sum_usd = models.FloatField()
+    orders = models.TextField(default='[]')
     date = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'${self.case} - ${self.symbol}'
+        return f'{self.case} - {self.symbol}'
 
     class Meta:
         ordering = ('-date',)
