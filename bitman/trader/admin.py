@@ -2,6 +2,10 @@ from django.contrib import admin
 from . import models
 
 
+admin.site.register(models.CaseToken)
+admin.site.register(models.CaseTokenOrder)
+
+
 class WathListInline(admin.TabularInline):
     model = models.WatchList
     extra = 0
@@ -45,7 +49,7 @@ class ChatMessageAdmin(admin.ModelAdmin):
 
 
 class CaseItemInline(admin.TabularInline):
-    model = models.CaseItem
+    model = models.CaseToken
     extra = 0
 
 

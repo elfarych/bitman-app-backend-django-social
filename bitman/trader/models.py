@@ -70,6 +70,7 @@ class Case(models.Model):
     title = models.CharField(max_length=255)
     text = models.CharField(max_length=255, null=True, blank=True)
     public = models.BooleanField(default=False)
+    fixed_profit = models.FloatField(default=0)
     date = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 
@@ -77,21 +78,42 @@ class Case(models.Model):
         return f'{self.trader} - {self.title}'
 
     class Meta:
-        ordering = ('-date',)   
+        ordering = ('-date',)
 
 
-class CaseItem(models.Model):
-    # Монета в портфеле
-    case = models.ForeignKey(Case, on_delete=models.SET_NULL, null=True, related_name='items')
+class CaseToken(models.Model):
+    """Монета в портфеле"""
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    case = models.ForeignKey(Case, on_delete=models.SET_NULL, null=True, related_name='tokens')
     symbol = models.CharField(max_length=20)
-    price = models.FloatField()
-    quantity_base_asset = models.FloatField()
-    orders = models.TextField(default='[]')
+    full_name = models.CharField(max_length=255, null=True, blank=True)
+    logo = models.CharField(max_length=255, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.case} - {self.symbol}'
+
+    class Meta:
+        ordering = ('-date',)
+
+
+class CaseTokenOrder(models.Model):
+    """Операция с монетой в портфеле"""
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    token = models.ForeignKey(CaseToken, on_delete=models.SET_NULL, null=True, related_name='orders')
+    case = models.ForeignKey(Case, on_delete=models.SET_NULL, null=True, related_name='token_orders')
+    logo = models.CharField(max_length=255, null=True, blank=True)
+    symbol = models.CharField(max_length=20)
+    price = models.FloatField()
+    quantity_base_asset = models.FloatField()
+    profit = models.FloatField(null=True, blank=True)
+    fix_order = models.BooleanField(default=False)
+    date = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.token} - {self.symbol}'
 
     class Meta:
         ordering = ('-date',)

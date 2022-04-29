@@ -11,8 +11,18 @@ urlpatterns = [
     path('chat/messages/', views.ChatMessagesView.as_view()),
     path('chat/message/create/', views.CreateChatMessage.as_view()),
 
+
     path('case/create/', views.CreateCaseView.as_view()),
     path('case/update/<int:pk>/', views.UpdateCaseView.as_view()),
+    path('case/delete/<int:pk>/', views.DeleteCaseView.as_view()),
+
+    path('case_token/create/', views.CreateCaseTokenView.as_view()),
+    path('case_token/update/<int:pk>/', views.UpdateCaseTokenView.as_view()),
+    path('case_token/delete/<int:pk>/', views.DeleteCaseTokenView.as_view()),
+
+    path('case_token_order/create/', views.CreateCaseTokenOrderView.as_view()),
+    path('case_token_order/update/<int:pk>/', views.UpdateCaseTokenOrderView.as_view()),
+    path('case_token_order/delete/<int:pk>/', views.DeleteCaseTokenView.as_view()),
 
     path('forecasts/', views.ForecastsListView.as_view()),
     path('forecasts/<int:pk>/', views.ForecastDetailView.as_view()),

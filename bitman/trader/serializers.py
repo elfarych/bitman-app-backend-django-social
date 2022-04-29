@@ -14,15 +14,24 @@ class WatchListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CaseItemsSerializer(serializers.ModelSerializer):
+class CaseTokenOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = models.CaseItem
+        model = models.CaseTokenOrder
+        fields = '__all__'
+
+
+class CaseTokenSerializer(serializers.ModelSerializer):
+    orders = CaseTokenOrderSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = models.CaseToken
         fields = '__all__'
 
 
 class CaseSerializer(serializers.ModelSerializer):
-    items = CaseItemsSerializer(many=True, read_only=True)
+    tokens = CaseTokenSerializer(many=True, read_only=True)
+    token_orders = CaseTokenOrderSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Case
