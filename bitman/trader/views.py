@@ -109,6 +109,13 @@ class ForecastDeleteView(generics.DestroyAPIView):
         return forecasts
 
 
+class CaseListView(generics.ListAPIView):
+    serializer_class = serializers.CaseSerializer
+
+    def get_queryset(self):
+        cases = models.Case.objects.filter(user=self.request.user)
+
+
 class CreateCaseView(generics.CreateAPIView):
     """Create new trader case view"""
     serializer_class = serializers.CaseSerializer

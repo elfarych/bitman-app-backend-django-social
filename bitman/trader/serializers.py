@@ -45,11 +45,7 @@ class ReferalTraderSerializer(serializers.ModelSerializer):
 
 
 class TraderSerializer(serializers.ModelSerializer):
-    
-    watchlist = WatchListSerializer(many=False, read_only=True)
     setting = SettingSerializer(many=False, read_only=True)
-    cases = CaseSerializer(many=True, read_only=True)
-    referals = ReferalTraderSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Trader

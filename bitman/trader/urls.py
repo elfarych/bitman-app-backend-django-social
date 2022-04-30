@@ -11,7 +11,7 @@ urlpatterns = [
     path('chat/messages/', views.ChatMessagesView.as_view()),
     path('chat/message/create/', views.CreateChatMessage.as_view()),
 
-
+    path('case/', views.CaseListView.as_view()),
     path('case/create/', views.CreateCaseView.as_view()),
     path('case/update/<int:pk>/', views.UpdateCaseView.as_view()),
     path('case/delete/<int:pk>/', views.DeleteCaseView.as_view()),
