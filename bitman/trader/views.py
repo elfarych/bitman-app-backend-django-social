@@ -1,4 +1,4 @@
-import re
+from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
@@ -114,6 +114,7 @@ class CaseListView(generics.ListAPIView):
 
     def get_queryset(self):
         cases = models.Case.objects.filter(user=self.request.user)
+        return cases
 
 
 class CreateCaseView(generics.CreateAPIView):
@@ -171,8 +172,8 @@ class DeleteCaseTokenView(generics.DestroyAPIView):
     serializer_class = serializers.CaseTokenSerializer
 
     def get_queryset(self):
-        cases = models.CaseToken.objects.filter(user=self.request.user)
-        return cases
+        tokens = models.CaseToken.objects.filter(user=self.request.user)
+        return tokens
 
 
 class CreateCaseTokenOrderView(generics.CreateAPIView):
@@ -195,7 +196,7 @@ class UpdateCaseTokenOrderView(generics.UpdateAPIView):
         return fixed_case_items
 
 
-class DeleteCaseTokenOrderView(generics.UpdateAPIView):
+class DeleteCaseTokenOrderView(generics.DestroyAPIView):
     """Delete case token order"""
     serializer_class = serializers.CaseTokenOrderSerializer
     permission_classes = [IsAuthenticated]
@@ -203,3 +204,15 @@ class DeleteCaseTokenOrderView(generics.UpdateAPIView):
     def get_queryset(self):
         fixed_case_items = models.CaseTokenOrder.objects.filter(user=self.request.user)
         return fixed_case_items
+
+
+def update_cases_view(request):
+    case_tokens = models.CaseToken.objects.filter(case=None)
+    for i in case_tokens:
+        i.delete()
+
+    case_orders = models.CaseTokenOrder.objects.filter(token=None)
+    for i in case_orders:
+        i.delete()
+
+    return HttpResponse('ok')

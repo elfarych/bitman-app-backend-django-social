@@ -22,11 +22,13 @@ urlpatterns = [
 
     path('case_token_order/create/', views.CreateCaseTokenOrderView.as_view()),
     path('case_token_order/update/<int:pk>/', views.UpdateCaseTokenOrderView.as_view()),
-    path('case_token_order/delete/<int:pk>/', views.DeleteCaseTokenView.as_view()),
+    path('case_token_order/delete/<int:pk>/', views.DeleteCaseTokenOrderView.as_view()),
 
     path('forecasts/', views.ForecastsListView.as_view()),
     path('forecasts/<int:pk>/', views.ForecastDetailView.as_view()),
     path('forecasts/my/', views.ForecastsListByTraderView.as_view()),
     path('forecasts/create/', views.CreateForecastView.as_view()),
     path('forecasts/delete/<int:pk>/', views.CreateForecastView.as_view()),
+
+    path('update_cases/', views.update_cases_view)
 ]
